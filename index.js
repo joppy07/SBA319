@@ -28,7 +28,78 @@ app.get("/api/books", async (req, res) => {
     }
   });
 
-
+// Get Book by ID
+app.get("/api/books/:id", async (req, res) => {
+    try {
+      const bookId = req.params.id;
+      const data = await Books.findById(bookId);
+  
+      if (!data) {
+        throw new Error("An error occured while fetching books.");
+      }
+  
+      res.status(201).json(data);
+    } catch (error) {
+      res.status(500).json({ error: "An error occured while fetching book..." });
+    }
+  });
+  
+  // Create A Book
+  app.post("/api/books", async (req, res) => {
+    try {
+      const { title, description } = req.body;
+  
+      const data = await Books.create({ title, description });
+  
+      if (!data) {
+        throw new Error("An error occured while creating a book.");
+      }
+  
+      res.status(201).json(data);
+    } catch (error) {
+      res
+        .status(500)
+        .json({ error: "An error occured while creating a book..." });
+    }
+  });
+  
+  // Update A Book
+  app.put("/api/books/:id", async (req, res) => {
+    try {
+      const bookId = req.params.id;
+      const { title, description } = req.body;
+  
+      const data = await Books.findByIdAndUpdate(bookId, { title, description });
+  
+      if (!data) {
+        throw new Error("An error occured while updating a book.");
+      }
+  
+      res.status(201).json(data);
+    } catch (error) {
+      res
+        .status(500)
+        .json({ error: "An error occured while updating a book..." });
+    }
+  });
+  
+  // Delete A Book by ID
+  app.delete("/api/books/:id", async (req, res) => {
+    try {
+      const bookId = req.params.id;
+      const data = await Books.findByIdAndDelete(bookId);
+  
+      if (!data) {
+        throw new Error("An error occured while deleting a book.");
+      }
+  
+      res.status(201).json(data);
+    } catch (error) {
+      res
+        .status(500)
+        .json({ error: "An error occured while deleting a book..." });
+    }
+  });
 
 app.get("/", (req, res) => {
     res.json("SBA319");
